@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "deviceName": "lightbulb1",
+    "room": "kitchen",
+    "status": null,
+    "on": false,
+    "percentage": 0,
+    "relatedDevices": null
+  },
+  {
+    "id": 2,
+    "deviceName": "lightbulb2",
+    "room": "kitchen",
+    "status": null,
+    "on": false,
+    "percentage": 0,
+    "relatedDevices": null
+  },
+  {
+    "id": 3,
+    "deviceName": "lightbulb",
+    "room": "bedroom1",
+    "status": null,
+    "on": false,
+    "percentage": 0,
+    "relatedDevices": null
+  },
+  {
+    "id": 4,
+    "deviceName": "lightbulb",
+    "room": "bedroom2",
+    "status": null,
+    "on": false,
+    "percentage": 0,
+    "relatedDevices": null
+  },
+  {
+    "id": 5,
+    "deviceName": "lightbulb",
+    "room": "bedroom3",
+    "status": null,
+    "on": false,
+    "percentage": 0,
+    "relatedDevices": null
+  }
+]
