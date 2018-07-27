@@ -1,17 +1,17 @@
 package lv.sh.model;
 
-import lv.sh.dto.Device;
-import lv.sh.repository.DeviceRepository;
+import lv.sh.dto.Cat;
+import lv.sh.repository.CatRepository;
 
 import java.util.List;
 
 public class SHCore {
 
-    private static List<Device> devices=null;
+    private static List<Cat> cats=null;
 
-    public static List<Device> getDevices(){
-        if (devices==null) devices= DeviceRepository.getInstance().getAllDevices();
-        return devices;
+    public static List<Cat> getCats(){
+        if (cats==null) cats= CatRepository.getInstance().getAllCats();
+        return cats;
     }
 
 }

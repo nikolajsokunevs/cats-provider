@@ -4,12 +4,9 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import lv.sh.dto.Device;
+import lv.sh.dto.Cat;
 import lv.sh.config.ApplicationProperties;
-import lv.sh.dto.Room;
-import lv.sh.repository.codecs.DeviceCodec;
-import lv.sh.repository.codecs.RoomCodec;
+import lv.sh.repository.codecs.CatCodec;
 import org.bson.Document;
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -23,9 +20,9 @@ import static java.lang.String.format;
 
 import static lv.sh.config.ApplicationProperties.getString;
 
-public class DeviceRepository {
+public class CatRepository {
 
-    public static DeviceRepository instance;
+    public static CatRepository instance;
 
     private static String HOST = getString(ApplicationProperties.ApplicationProperty.DB_HOST);
     private static String PORT = getString(ApplicationProperties.ApplicationProperty.DB_PORT);
@@ -38,21 +35,20 @@ public class DeviceRepository {
 
     private CodecRegistry codecRegistry;
 
-    private DeviceRepository() {
+    private CatRepository() {
 
         Codec<Document> defaultDocumentCodec = MongoClient.getDefaultCodecRegistry().get(Document.class);
-        DeviceCodec deviceCodec = new DeviceCodec(defaultDocumentCodec);
-        RoomCodec roomCodec = new RoomCodec(defaultDocumentCodec);
-        codecRegistry = CodecRegistries.fromRegistries(MongoClient.getDefaultCodecRegistry(), CodecRegistries.fromCodecs(deviceCodec), CodecRegistries.fromCodecs(roomCodec));
+        CatCodec catCodec = new CatCodec(defaultDocumentCodec);
+        codecRegistry = CodecRegistries.fromRegistries(MongoClient.getDefaultCodecRegistry(), CodecRegistries.fromCodecs(catCodec));
 
         MongoClientURI uri = new MongoClientURI(getConnectionURL());
         MongoClient mongoClient = new MongoClient(uri);
         db = mongoClient.getDatabase(DB_NAME).withCodecRegistry(codecRegistry);
     }
 
-    public static DeviceRepository getInstance() {
+    public static CatRepository getInstance() {
         if (instance != null) return instance;
-        instance = new DeviceRepository();
+        instance = new CatRepository();
         return instance;
     }
 
@@ -61,31 +57,15 @@ public class DeviceRepository {
         return url;
     }
 
-    public void insertDevice(Device device) {
-        MongoCollection<Device> collection = db.getCollection("device", Device.class);
-        collection.insertOne(device);
+    public void insertCat(Cat cat) {
+        MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
+        collection.insertOne(cat);
     }
 
-    public void insertRoom(Room room) {
-        MongoCollection<Room> collection = db.getCollection("room", Room.class);
-        collection.insertOne(room);
-    }
-
-    public void updateRoom(Room room, String id) {
-        MongoCollection<Room> collection = db.getCollection("room", Room.class);
-        collection.deleteOne(Filters.eq("_id", id));
-        collection.insertOne(room);
-    }
-
-    public List<Device> getAllDevices() {
-        MongoCollection<Device> collection = db.getCollection("device", Device.class);
-        List<Device> foundDocument = collection.find().into(new ArrayList<Device>());
+    public List<Cat> getAllCats() {
+        MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
+        List<Cat> foundDocument = collection.find().into(new ArrayList<Cat>());
         return foundDocument;
     }
 
-    public List<Room> getAllRooms() {
-        MongoCollection<Room> collection = db.getCollection("room", Room.class);
-        List<Room> foundDocument = collection.find().into(new ArrayList<Room>());
-        return foundDocument;
-    }
 }
