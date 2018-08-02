@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import lv.sh.dto.Cat;
 import lv.sh.config.ApplicationProperties;
+import lv.sh.dto.Cat_;
 import lv.sh.repository.codecs.CatCodec;
 import org.bson.Document;
 import org.bson.codecs.Codec;
@@ -62,10 +63,27 @@ public class CatRepository {
         collection.insertOne(cat);
     }
 
-    public List<Cat> getAllCats() {
+    public List<Cat_> getAllCats() {
         MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
         List<Cat> foundDocument = collection.find().into(new ArrayList<Cat>());
-        return foundDocument;
+        return convertCatToCat_(foundDocument);
+    }
+
+    private List<Cat_> convertCatToCat_(List<Cat> cats){
+        List<Cat_> response = new ArrayList<>();
+        for(Cat current:cats){
+            Cat_ currentR=new Cat_(current);
+            if (current.getAncestors()!=null){
+                response.addAll(convertCatToCat_(current.getAncestors()));
+                List<String> ancestorsForCurrent=new ArrayList<>();
+                for (Cat ancestor:current.getAncestors()) {
+                    ancestorsForCurrent.add((ancestor.getId()));
+                }
+                currentR.setAncestors(ancestorsForCurrent);
+            }
+            response.add(currentR);
+        }
+        return response;
     }
 
 }
