@@ -3,7 +3,9 @@ package lv.sh.repository.codecs;
 import lv.sh.dto.Cat;
 import org.bson.*;
 import org.bson.codecs.*;
+import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CatCodec implements CollectibleCodec<Cat> {
@@ -27,14 +29,14 @@ public class CatCodec implements CollectibleCodec<Cat> {
 
     public Document catToDocument(Cat cat) {
         Document document = new Document();
-        Integer id = cat.getId();
+        String id = cat.getId();
         String name = cat.getName();
         String lastname = cat.getLastname();
 
         String breed = cat.getBreed();
         Integer age = cat.getAge();
         List<String> vaccination = cat.getVaccination();
-        Cat[] ancestors = cat.getAncestors();
+        List<Cat> ancestors = cat.getAncestors();
 
 
         if (null != name) document.put("_id", id);
@@ -43,7 +45,13 @@ public class CatCodec implements CollectibleCodec<Cat> {
         if (null != breed) document.put("breed", breed);
         if (null != age) document.put("age", age);
         if (null != vaccination) document.put("vaccination", vaccination);
-        if (null != ancestors) document.put("ancestors", ancestors);
+        if (null != ancestors) {
+            List<Document> ancestorsD=new ArrayList<>();
+            for (Cat current : ancestors) {
+                ancestorsD.add(catToDocument(generateIdIfAbsentFromDocument(current)));
+            }
+            document.put("ancestors", ancestorsD);
+        }
         return document;
     }
 
@@ -57,26 +65,37 @@ public class CatCodec implements CollectibleCodec<Cat> {
     public Cat decode(BsonReader reader, DecoderContext decoderContext) {
         Document document = documentCodec.decode(reader, decoderContext);
         System.out.println("document " + document);
-        //Cat cat = documentToDevice(document);
-        return null;
+        return documentToCat(document);
     }
 
-    public Cat documentToDevice(Document document) {
+    public Cat documentToCat(Document document) {
         Cat cat = new Cat();
-        cat.setId(document.getInteger("_id"));
+        cat.setId(document.getString("_id"));
         cat.setName(document.getString("name"));
         cat.setLastname(document.getString("lastname"));
         cat.setBreed(document.getString("breed"));
         cat.setAge(document.getInteger("age"));
         cat.setVaccination((List<String>) document.get("vaccination"));
-        cat.setAncestors((Cat[]) document.get("ancestors"));
+
+        //cat.setAncestors((List<Cat>) document.get("ancestors"));
+        List<Document> ancestorsD=((List<Document>) document.get("ancestors"));
+        if (ancestorsD!=null) {
+            List<Cat> ancestors = new ArrayList<>();
+            if (ancestorsD.size()>0){
+                for (Document current : ancestorsD) {
+                    ancestors.add(documentToCat(current));
+                }
+            }
+            cat.setAncestors(ancestors);
+        }
         return cat;
     }
 
     @Override
     public Cat generateIdIfAbsentFromDocument(Cat document) {
-        Cat cat = document;
-        return cat;
+        Cat catWithId = document;
+        if (catWithId.getId() == null) catWithId.setId(new ObjectId().toString());
+        return catWithId;
     }
 
     @Override
@@ -89,7 +108,6 @@ public class CatCodec implements CollectibleCodec<Cat> {
         if (!documentHasId(document)) {
             throw new IllegalStateException("The document does not contain an _id");
         }
-
-        return new BsonInt32(document.getId());
+        return new BsonString(document.getId());
     }
 }

@@ -4,9 +4,10 @@ import lv.sh.dto.Cat;
 import lv.sh.service.cat.CatServiceImpl;
 import lv.sh.service.cat.ICatService;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("device")
+@Path("cats")
 public class CatResource {
 
     @GET
@@ -14,15 +15,16 @@ public class CatResource {
     @Produces("application/json")
     public List<Cat> getAll(){
         ICatService catService=new CatServiceImpl();
-        return catService.getAllCats();
+        List<Cat> allCats =catService.getAllCats();
+        return allCats;
     }
 
     @POST
     @Path("add")
     @Produces("application/json")
-    public String post(Cat cat){
+    public Response post(Cat cat){
         ICatService catService=new CatServiceImpl();
         catService.addCat(cat);
-        return "DONE";
+        return Response.ok().entity(cat).build();
     }
 }

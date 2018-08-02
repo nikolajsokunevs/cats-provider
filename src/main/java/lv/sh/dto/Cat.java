@@ -4,19 +4,19 @@ import java.util.List;
 
 public class Cat {
 
-    private Integer id;
+    private String id;
     private String name;
     private String lastname;
     private String breed;
     private Integer age;
     private List<String> vaccination;
-    private Cat[] ancestors=new Cat[2];
+    private List<Cat> ancestors;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -60,11 +60,11 @@ public class Cat {
         this.vaccination = vaccination;
     }
 
-    public Cat[] getAncestors() {
+    public List<Cat> getAncestors() {
         return ancestors;
     }
 
-    public void setAncestors(Cat[] ancestors) {
+    public void setAncestors(List<Cat> ancestors) {
         this.ancestors = ancestors;
     }
 

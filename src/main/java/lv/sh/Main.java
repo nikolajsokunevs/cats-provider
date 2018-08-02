@@ -21,7 +21,7 @@ public class Main {
         protocol = "http://";
         host = Optional.ofNullable(System.getenv("0.0.0.0"));
         port = Optional.ofNullable(System.getenv("PORT"));
-        path = "myapp";
+        path = "rest";
         BASE_URI = protocol + host.orElse("0.0.0.0") + ":" + port.orElse("8080") + "/" + path + "/";
     }
 
@@ -34,7 +34,7 @@ public class Main {
        final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
-        server.shutdown();
+       // server.shutdown();
 
     }
 }
