@@ -1,17 +1,18 @@
 package lv.sh.repository;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import lv.sh.dto.Cat;
 import lv.sh.config.ApplicationProperties;
-import lv.sh.dto.Cat_;
 import lv.sh.repository.codecs.CatCodec;
 import org.bson.Document;
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.conversions.Bson;
 
 
 import java.util.ArrayList;
@@ -63,27 +64,30 @@ public class CatRepository {
         collection.insertOne(cat);
     }
 
-    public List<Cat_> getAllCats() {
+    public List<Cat> getAllCats() {
         MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
-        List<Cat> foundDocument = collection.find().into(new ArrayList<Cat>());
-        return convertCatToCat_(foundDocument);
+        return collection.find().into(new ArrayList<>());
     }
 
-    private List<Cat_> convertCatToCat_(List<Cat> cats){
-        List<Cat_> response = new ArrayList<>();
-        for(Cat current:cats){
-            Cat_ currentR=new Cat_(current);
-            if (current.getAncestors()!=null){
-                response.addAll(convertCatToCat_(current.getAncestors()));
-                List<String> ancestorsForCurrent=new ArrayList<>();
-                for (Cat ancestor:current.getAncestors()) {
-                    ancestorsForCurrent.add((ancestor.getId()));
-                }
-                currentR.setAncestors(ancestorsForCurrent);
-            }
-            response.add(currentR);
-        }
-        return response;
+    public Cat getCatById(String id){
+        MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
+        BasicDBObject searchObject = new BasicDBObject();
+        searchObject.put("_id", id);
+        List<Cat> cats=collection.find(searchObject).into(new ArrayList<>());
+        if (cats.size()>0) return cats.get(0);
+        return new Cat();
     }
 
+    public void deleteCat(String id){
+        MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
+        BasicDBObject searchObject = new BasicDBObject();
+        searchObject.put("_id", id);
+        collection.deleteOne(searchObject);
+    }
+
+    public void updateCat(String id, Cat cat){
+        deleteCat(id);
+        cat.setId(id);
+        insertCat(cat);
+    }
 }

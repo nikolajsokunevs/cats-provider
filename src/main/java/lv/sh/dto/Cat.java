@@ -10,7 +10,7 @@ public class Cat {
     private String breed;
     private Integer age;
     private List<String> vaccination;
-    private List<Cat> ancestors;
+    private List<String> ancestors;
 
     public String getId() {
         return id;
@@ -60,11 +60,11 @@ public class Cat {
         this.vaccination = vaccination;
     }
 
-    public List<Cat> getAncestors() {
+    public List<String> getAncestors() {
         return ancestors;
     }
 
-    public void setAncestors(List<Cat> ancestors) {
+    public void setAncestors(List<String> ancestors) {
         this.ancestors = ancestors;
     }
 

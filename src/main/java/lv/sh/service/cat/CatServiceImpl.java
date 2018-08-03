@@ -1,7 +1,6 @@
 package lv.sh.service.cat;
 
 import lv.sh.dto.Cat;
-import lv.sh.dto.Cat_;
 import lv.sh.repository.CatRepository;
 
 import java.util.List;
@@ -17,7 +16,22 @@ public class CatServiceImpl implements ICatService {
     }
 
     @Override
-    public List<Cat_> getAllCats() {
+    public List<Cat> getAllCats() {
         return catRepository.getAllCats();
+    }
+
+    @Override
+    public Cat getCatById(String id) {
+        return catRepository.getCatById(id);
+    }
+
+    @Override
+    public void deleteCat(String id) {
+        catRepository.deleteCat(id);
+    }
+
+    @Override
+    public void updateCat(String id, Cat cat) {
+        catRepository.updateCat(id, cat);
     }
 }

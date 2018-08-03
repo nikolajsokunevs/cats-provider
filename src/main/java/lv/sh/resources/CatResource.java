@@ -1,8 +1,6 @@
 package lv.sh.resources;
 
 import lv.sh.dto.Cat;
-import lv.sh.dto.CatGetAll;
-import lv.sh.dto.Cat_;
 import lv.sh.service.cat.CatServiceImpl;
 import lv.sh.service.cat.ICatService;
 import javax.ws.rs.*;
@@ -15,11 +13,9 @@ public class CatResource {
     @GET
     @Path("all")
     @Produces("application/json")
-    public CatGetAll getAll(){
+    public List<Cat> getAll(){
         ICatService catService=new CatServiceImpl();
-        List<Cat_> allCats =catService.getAllCats();
-        CatGetAll response = new CatGetAll(allCats);
-        return response;
+        return catService.getAllCats();
     }
 
     @POST
@@ -36,7 +32,23 @@ public class CatResource {
     @Produces("application/json")
     public Cat getById(@PathParam( "id" ) String catId){
         ICatService catService=new CatServiceImpl();
-        List<Cat_> allCats =catService.getAllCats();
-        return null;
+        return catService.getCatById(catId);
+    }
+
+    @DELETE
+    @Path("delete/{id}")
+    public Response delete(@PathParam( "id" ) String catId){
+        ICatService catService=new CatServiceImpl();
+        catService.deleteCat(catId);
+        return Response.ok().allow("Cat was deleted").build();
+    }
+
+    @PUT
+    @Path("update/{id}")
+    @Produces("application/json")
+    public Response update(@PathParam( "id" ) String catId, Cat cat){
+        ICatService catService=new CatServiceImpl();
+        catService.updateCat(catId, cat);
+        return Response.ok().entity(cat).build();
     }
 }

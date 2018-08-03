@@ -36,7 +36,7 @@ public class CatCodec implements CollectibleCodec<Cat> {
         String breed = cat.getBreed();
         Integer age = cat.getAge();
         List<String> vaccination = cat.getVaccination();
-        List<Cat> ancestors = cat.getAncestors();
+        List<String> ancestors = cat.getAncestors();
 
 
         if (null != name) document.put("_id", id);
@@ -45,13 +45,7 @@ public class CatCodec implements CollectibleCodec<Cat> {
         if (null != breed) document.put("breed", breed);
         if (null != age) document.put("age", age);
         if (null != vaccination) document.put("vaccination", vaccination);
-        if (null != ancestors) {
-            List<Document> ancestorsD=new ArrayList<>();
-            for (Cat current : ancestors) {
-                ancestorsD.add(catToDocument(generateIdIfAbsentFromDocument(current)));
-            }
-            document.put("ancestors", ancestorsD);
-        }
+        if (null != ancestors) document.put("ancestors", ancestors);
         return document;
     }
 
@@ -76,18 +70,7 @@ public class CatCodec implements CollectibleCodec<Cat> {
         cat.setBreed(document.getString("breed"));
         cat.setAge(document.getInteger("age"));
         cat.setVaccination((List<String>) document.get("vaccination"));
-
-        //cat.setAncestors((List<Cat>) document.get("ancestors"));
-        List<Document> ancestorsD=((List<Document>) document.get("ancestors"));
-        if (ancestorsD!=null) {
-            List<Cat> ancestors = new ArrayList<>();
-            if (ancestorsD.size()>0){
-                for (Document current : ancestorsD) {
-                    ancestors.add(documentToCat(current));
-                }
-            }
-            cat.setAncestors(ancestors);
-        }
+        cat.setAncestors((List<String>) document.get("ancestors"));
         return cat;
     }
 
