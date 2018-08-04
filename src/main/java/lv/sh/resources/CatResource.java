@@ -4,6 +4,7 @@ import lv.sh.dto.Cat;
 import lv.sh.service.cat.CatServiceImpl;
 import lv.sh.service.cat.ICatService;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -37,10 +38,11 @@ public class CatResource {
 
     @DELETE
     @Path("delete/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response delete(@PathParam( "id" ) String catId){
         ICatService catService=new CatServiceImpl();
         catService.deleteCat(catId);
-        return Response.ok().allow("Cat was deleted").build();
+        return Response.ok().entity("Cat was deleted").build();
     }
 
     @PUT
