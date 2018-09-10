@@ -1,5 +1,6 @@
 package lv.sh;
 
+import lv.sh.resources.AuthenticationFilter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -27,6 +28,7 @@ public class Main {
 
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig().packages("lv.sh.resources");
+        rc.register(new AuthenticationFilter());
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 

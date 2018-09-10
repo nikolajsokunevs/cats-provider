@@ -25,11 +25,9 @@ import static lv.sh.config.ApplicationProperties.getString;
 public class CatRepository {
 
     public static CatRepository instance;
-
     private static String HOST = getString(ApplicationProperties.ApplicationProperty.DB_HOST);
     private static String PORT = getString(ApplicationProperties.ApplicationProperty.DB_PORT);
     private static String DB_NAME = getString(ApplicationProperties.ApplicationProperty.DB_NAME);
-
     private static String USER = getString(ApplicationProperties.ApplicationProperty.DB_USER);
     private static String PASSWORD = getString(ApplicationProperties.ApplicationProperty.DB_PASSWORD);
 
@@ -82,6 +80,12 @@ public class CatRepository {
         MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
         BasicDBObject searchObject = new BasicDBObject();
         searchObject.put("_id", id);
+        collection.deleteOne(searchObject);
+    }
+
+    public void deleteCat(){
+        MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
+        BasicDBObject searchObject = new BasicDBObject();
         collection.deleteOne(searchObject);
     }
 

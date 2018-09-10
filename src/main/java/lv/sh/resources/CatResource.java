@@ -3,6 +3,8 @@ package lv.sh.resources;
 import lv.sh.dto.Cat;
 import lv.sh.service.cat.CatServiceImpl;
 import lv.sh.service.cat.ICatService;
+
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -14,9 +16,10 @@ public class CatResource {
     @GET
     @Path("all")
     @Produces("application/json")
-    public List<Cat> getAll(){
+    public Response getAll(){
         ICatService catService=new CatServiceImpl();
-        return catService.getAllCats();
+        return Response.status(200).
+                entity(catService.getAllCats()).build();
     }
 
     @POST
@@ -36,6 +39,7 @@ public class CatResource {
         return catService.getCatById(catId);
     }
 
+    @RolesAllowed("ADMIN")
     @DELETE
     @Path("delete/{id}")
     @Produces(MediaType.TEXT_PLAIN)

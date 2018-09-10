@@ -1,38 +1,8 @@
 [
   {
-    "id": 1,
     "name": "",
     "lastname": "",
     "breed": "",
-    "age": 0,
-    "vaccination": [
-      "",
-      ""
-    ],
-    "ancestors": [
-      {
-        "id": 2,
-        "name": "",
-        "lastname": "",
-        "breed": "",
-        "age": 0,
-        "vaccination": [
-          "",
-          ""
-        ],
-        "ancestors": null
-      },
-      {
-        "id": 3,
-        "name": "",
-        "lastname": "",
-        "breed": "",
-        "age": 0,
-        "vaccination": [
-          "",
-          ""
-        ]
-      }
-    ]
+    "age": 0
   }
 ]
