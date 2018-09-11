@@ -36,7 +36,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
             //Access denied for all
             if (method.isAnnotationPresent(DenyAll.class)) {
                 requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
-                                .entity("Access blocked for all users !!").build());
+                        .entity("Access blocked for all users !!").build());
                 return;
             }
 
@@ -49,7 +49,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
             //If no authorization information present; block access
             if (authorization == null || authorization.isEmpty()) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                                .entity("You cannot access this resource").build());
+                        .entity("You cannot access this resource").build());
                 return;
             }
 
@@ -91,7 +91,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
             if (rolesSet.contains(userRole)) {
                 isAllowed = true;
             }
-        }else if(username.equals("admin") && password.equals("scumgang")){
+        } else if (username.equals("admin") && password.equals("scumgang")) {
             String userRole = "ADMIN";
 
             if (rolesSet.contains(userRole)) {

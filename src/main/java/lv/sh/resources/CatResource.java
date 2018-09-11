@@ -9,6 +9,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("cats")
 public class CatResource {
@@ -16,17 +17,24 @@ public class CatResource {
     @GET
     @Path("all")
     @Produces("application/json")
-    public Response getAll(){
-        ICatService catService=new CatServiceImpl();
+    public Response getAll(@QueryParam("firstName") String firstName, @QueryParam("lastName") String lastName) {
+        ICatService catService = new CatServiceImpl();
+        List<Cat> allCats=catService.getAllCats();
+        if (firstName!=null) {
+            allCats = allCats.stream().filter(x->firstName.equals(x.getName())).collect(Collectors.toList());
+        }
+        if (lastName!=null){
+            allCats = allCats.stream().filter(x->lastName.equals(x.getLastname())).collect(Collectors.toList());
+        }
         return Response.status(200).
-                entity(catService.getAllCats()).build();
+                entity(allCats).build();
     }
 
     @POST
     @Path("add")
     @Produces("application/json")
-    public Response post(Cat cat){
-        ICatService catService=new CatServiceImpl();
+    public Response post(Cat cat) {
+        ICatService catService = new CatServiceImpl();
         catService.addCat(cat);
         return Response.ok().entity(cat).build();
     }
@@ -34,8 +42,8 @@ public class CatResource {
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public Cat getById(@PathParam( "id" ) String catId){
-        ICatService catService=new CatServiceImpl();
+    public Cat getById(@PathParam("id") String catId) {
+        ICatService catService = new CatServiceImpl();
         return catService.getCatById(catId);
     }
 
@@ -43,17 +51,18 @@ public class CatResource {
     @DELETE
     @Path("delete/{id}")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response delete(@PathParam( "id" ) String catId){
-        ICatService catService=new CatServiceImpl();
-        catService.deleteCat(catId);
+    public Response delete(@PathParam("id") String catId, @QueryParam("useId") boolean useId) {
+        ICatService catService = new CatServiceImpl();
+        catService.deleteCat(catId, useId);
         return Response.ok().entity("Cat was deleted").build();
     }
+
 
     @PUT
     @Path("update/{id}")
     @Produces("application/json")
-    public Response update(@PathParam( "id" ) String catId, Cat cat){
-        ICatService catService=new CatServiceImpl();
+    public Response update(@PathParam("id") String catId, Cat cat) {
+        ICatService catService = new CatServiceImpl();
         catService.updateCat(catId, cat);
         return Response.ok().entity(cat).build();
     }

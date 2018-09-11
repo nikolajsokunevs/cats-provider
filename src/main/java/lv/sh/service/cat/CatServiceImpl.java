@@ -26,8 +26,12 @@ public class CatServiceImpl implements ICatService {
     }
 
     @Override
-    public void deleteCat(String id) {
-        catRepository.deleteCat();
+    public void deleteCat(String id, boolean useId) {
+        if (useId){
+            catRepository.deleteCat(id);
+        }else {
+            catRepository.deleteCat();
+        }
     }
 
     @Override

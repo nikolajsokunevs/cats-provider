@@ -67,29 +67,29 @@ public class CatRepository {
         return collection.find().into(new ArrayList<>());
     }
 
-    public Cat getCatById(String id){
+    public Cat getCatById(String id) {
         MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
         BasicDBObject searchObject = new BasicDBObject();
         searchObject.put("_id", id);
-        List<Cat> cats=collection.find(searchObject).into(new ArrayList<>());
-        if (cats.size()>0) return cats.get(0);
+        List<Cat> cats = collection.find(searchObject).into(new ArrayList<>());
+        if (cats.size() > 0) return cats.get(0);
         return new Cat();
     }
 
-    public void deleteCat(String id){
+    public void deleteCat(String id) {
         MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
         BasicDBObject searchObject = new BasicDBObject();
         searchObject.put("_id", id);
         collection.deleteOne(searchObject);
     }
 
-    public void deleteCat(){
+    public void deleteCat() {
         MongoCollection<Cat> collection = db.getCollection("cat", Cat.class);
         BasicDBObject searchObject = new BasicDBObject();
         collection.deleteOne(searchObject);
     }
 
-    public void updateCat(String id, Cat cat){
+    public void updateCat(String id, Cat cat) {
         deleteCat(id);
         cat.setId(id);
         insertCat(cat);
