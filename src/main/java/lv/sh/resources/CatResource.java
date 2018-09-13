@@ -42,9 +42,13 @@ public class CatResource {
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public Cat getById(@PathParam("id") String catId) {
+    public Response getById(@PathParam("id") String catId) {
         ICatService catService = new CatServiceImpl();
-        return catService.getCatById(catId);
+        Cat cat =catService.getCatById(catId);
+        if (cat.getId()==null){
+            return Response.ok().entity("Cat not exists").build();
+        }
+        return Response.ok().entity(catService.getCatById(catId)).build();
     }
 
     @RolesAllowed("ADMIN")
