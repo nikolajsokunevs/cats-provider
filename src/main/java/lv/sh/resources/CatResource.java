@@ -46,7 +46,7 @@ public class CatResource {
         ICatService catService = new CatServiceImpl();
         Cat cat =catService.getCatById(catId);
         if (cat.getId()==null){
-            return Response.ok().entity("Cat not exists").build();
+            return Response.ok().entity("{}").build();
         }
         return Response.ok().entity(catService.getCatById(catId)).build();
     }
