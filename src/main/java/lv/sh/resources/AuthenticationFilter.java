@@ -85,13 +85,13 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
     private boolean isUserAllowed(final String username, final String password, final Set<String> rolesSet) {
         boolean isAllowed = false;
 
-        if (username.equals("user") && password.equals("scrumgang")) {
+        if (username.equals("user") && password.equals("password")) {
             String userRole = "USER";
 
             if (rolesSet.contains(userRole)) {
                 isAllowed = true;
             }
-        } else if (username.equals("admin") && password.equals("scrumgang")) {
+        } else if (username.equals("admin") && password.equals("password")) {
             String userRole = "ADMIN";
 
             if (rolesSet.contains(userRole)) {
